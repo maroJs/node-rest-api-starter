@@ -1,0 +1,62 @@
+{
+  "name": "node-rest-api-starter",
+  "version": "0.1.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "node server.js",
+    "start-debug": "node --inspect server.js"
+  },
+  "private": true,
+  "dependencies": {
+    "bcrypt": "^1.0.2",
+    "body-parser": "^1.16.0",
+    "cloudinary": "^1.8.0",
+    "core-js": "^2.4.1",
+    "dotenv": "^4.0.0",
+    "express": "^4.14.1",
+    "jsonwebtoken": "^7.2.1",
+    "lodash": "^4.17.4",
+    "moment": "^2.18.1",
+    "mongodb": "^2.2.22",
+    "mongoose": "^4.8.1",
+    "mongoose-deep-populate": "^3.0.0",
+    "mongoose-findorcreate": "^1.0.0",
+    "multer": "^1.3.0",
+    "passport": "^0.3.2",
+    "passport-http-bearer": "^1.0.1",
+    "passport-local": "^1.0.0",
+    "q": "^1.4.1",
+    "restify": "^4.3.0",
+    "restify-jwt": "^0.4.0",
+    "restify-standard-errors": "^1.0.5",
+    "rxjs": "^5.0.1",
+    "ts-helpers": "^1.1.1",
+    "zone.js": "^0.7.2"
+  },
+  "devDependencies": {
+    "protractor": "~4.0.13",
+    "ts-node": "1.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marooking88/node-rest-api-starter.git"
+  },
+  "author": {
+    "name": "Marouane ben guerfa",
+    "email": "marwen.b.garfa@gmail.com"
+  },
+  "keywords": [
+    "node",
+    "rest",
+    "api",
+    "express",
+    "mongodb",
+    "mongoose"
+  ],
+  "bugs": {
+    "url": "https://github.com/marooking88/node-rest-api-starter.git/issues"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}
