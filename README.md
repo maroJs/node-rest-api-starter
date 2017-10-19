@@ -1,5 +1,5 @@
 # node-rest-api-starter
-This node projectis a boilerplate rest API based  and express server and mongodb.
+This node projectis a boilerplate rest API based on  express server, restify and and mongodb.
 
 ## Description
 The project is a starter to create your rest api, you have just to add your resources:
