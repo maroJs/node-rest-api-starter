@@ -4,6 +4,7 @@ require('dotenv').config();
 
 var mongoose = require("mongoose");
 var multer = require('multer');
+const log = require('simple-node-logger').createSimpleLogger('./log/server.log');
 
 
 // CONNECT  TO MONGODB (you have to set environement variable MONGODB_URI)
@@ -12,23 +13,15 @@ mongoose.connect(process.env.MONGODB_URI, {useMongoClient:true});
 // CONNECTION EVENTS
 // When successfully connected
 mongoose.connection.on('connected', function () {
-  console.log('Mongoose default connection open to  mongodb' );
+  log.info('--'+ new Date().toJSON() +' Mongoose default connection open to  mongodb');
 });
 
 // If the connection throws an error
 mongoose.connection.on('error',function (err) {
-  console.log('Mongoose default connection error: ' + err);
+  log.info('--'+ new Date().toJSON() +' Mongoose default connection error: ', err);
 });
 
 
-// import the controller module
-var controllers = {}
-  , controllers_path = process.cwd() + '/app/controllers';
-fs.readdirSync(controllers_path).forEach(function (file) {
-  if (file.indexOf('.js') != -1) {
-    controllers[file.split('.')[0]] = require(controllers_path + '/' + file)
-  }
-});
 
 
 // Add request header config
@@ -62,55 +55,32 @@ server.opts('/\.*/', corsHandler, optionsRoute);
 // handle the authentication by token
 server  = require('./app/auth.js')(server);
 
-// Then set that token in the headers to access routes requiring authorization:
-// Authorization: Bearer <token here>
-server.get('/api', function(req, res) {
-  return res.json({
-    status: 'ok',
-    resources: [
-      {name: 'user', url: '/user', access:'private'},
-      {name: 'article', url: '/article', access:'private'},
-      {name: 'api', url: '/api', access:'public'},
-      {name: 'login', url: '/login', access:'public'}
-    ]
-  }); // you can add other info about the api here :)
-});
-
-
 // all the API route  are here !!!!
+server  = require('./app/routes.js')(server);
 
-// Article Start CRUD
-server.post("/article", controllers.article.post);
-server.put("/article/:id", controllers.article.update);
-server.post("/article/delete/:id", controllers.article.delete);
-server.get("/article", controllers.article.get);
-server.get("/article/:id", controllers.article.get);
-// Article End
-
-// user Start CRUD
-server.post("/user", controllers.user.post);
-server.put("/user/:id", controllers.user.update);
-server.post("/user/delete/:id", controllers.user.delete);
-server.get("/user", controllers.user.get);
-server.get("/user/:id", controllers.user.get);
-// user End
+//server  = require('./api.js')(server);
 
 
 // HERE YOU CAN ADD OTHER RESSOURCES
 
+// #LIST_CUSTOM_API
+
+
+
 // Error handler middleware
 server.use(function(err, req, res, next) {
-  console.error(err);
   return res.status(500).json({ status: 'error', code: 'unauthorized' });
 });
 
 
 var port = process.env.PORT || 8082;
 server.listen(port, function (err) {
-  if (err)
-    console.error(err);
-  else
-    console.log('App is ready at : ' + port)
+  if (err){
+    log.info('--'+ new Date().toJSON() +' Run server error: ', err);
+  }
+  else {
+    log.info('--'+ new Date().toJSON() +' App is ready at: ', err);
+  }
 });
 
 if (process.env.environment == 'production')

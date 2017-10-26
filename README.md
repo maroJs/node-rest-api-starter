@@ -24,8 +24,63 @@ Clone the project to your local:
 $ git clone git@github.com:marooking88/node-rest-api-starter.git
 ```
 
+## Init
+You can init your new resource files (controller,model adn routes) from a simple json file.
+myjson.json to add 'book' resource:
+```json
+{
+  "data": [
+    {
+      "autoCreate": true,
+      "name": "book",
+      "url": "/book",
+      "methods": [
+        "get",
+        "post",
+        "put",
+        "delete"
+      ],
+      "access": "public",
+      "fields": [
+        {
+          "title": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "title": "pages",
+          "type": "number",
+          "required": false
+        },
+        {
+          "title": "author",
+          "type": "string",
+          "required": false
+        }
+      ]
+    }
+  ]
+}
 
+```
+Parameters:
+##### name: (string) 
+the resource name.
+##### url: (string) 
+the resource URL
+##### access: (string) 
+if private , access by token to th resource.
+##### autoCreate: (boolean) 
+true when you want to add the resource.
+##### fileds: (array)
+Resource fields (database columns)[Object(title,type,required,unique)]  
 
+### Create New Resource
+
+to create the resource from myjson file you have  to run:
+```bash
+npm run create
+```
 ## Demo
 
 - install the node modules
@@ -43,6 +98,13 @@ npm start-debug
 ```
 
 - Go to http://localhost:8082/api
+
+## Log
+
+2 log files in log folder:
+server:The server log messages.
+api-create: Log when init new resource
+
 ## License
 
 MIT © [Marouane ben guerfa](mailto:marwen.b.garfa@gmail.com)

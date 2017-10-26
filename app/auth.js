@@ -4,6 +4,22 @@ module.exports = function (server) {
     passport       = require('passport'),
     LocalStrategy  = require('passport-local').Strategy,
     moment = require('moment');
+  var lodash = require('lodash');
+
+  const log = require('simple-node-logger').createSimpleLogger('./log/server.log');
+
+
+  function logRequstData(req) {
+    log.info('--'+ new Date().toJSON() +' start request --------- Method:',req.method,' URL: ', req.url,' BODY:',JSON.stringify(req.body));
+  }
+
+  function logResponseData(res) {
+    if(res.status !== 200) {
+      log.warn('--'+ new Date().toJSON() +' Response ERROR ---------  BODY:',JSON.stringify(res));
+    }else {
+      log.info('--'+ new Date().toJSON() +' Response ---------------  BODY:',JSON.stringify(res));
+    }
+  }
 
   User = require('./controllers/user');
 
@@ -21,8 +37,15 @@ module.exports = function (server) {
     });
 
   }));
-  var exposedUrl = ['/login', '/api']; // add the resource that you want to access without token eg: '/article' or
-
+  var exposedUrl = [new RegExp('/login'), new RegExp('/api')]; // add the resource that you want to access without token eg: '/article' or
+  var customApi = require('../myjson');
+  if(customApi) {
+    lodash.forEach(customApi.data,function (item) {
+      if(item.access === 'public') {
+        exposedUrl.push(new RegExp('^'+item.url+'*'));
+      }
+    });
+  }
   server.use(passport.initialize());
   server.use(ejwt({secret: secret, userProperty: 'tokenPayload'}).unless({path: exposedUrl }));
 
@@ -44,18 +67,31 @@ module.exports = function (server) {
 
 
   server.use(function(req, res, next) {
+
+    // log request and response data
+    logRequstData(req);
+    res.on('finish', function(){
+      logResponseData(res._body);
+    });
+
+    // test request token
     if (req.tokenPayload) {
       User.find({_id:req.tokenPayload.id}).then(function(user){
         req.user = user;
         return next();
       }).catch(function(err){
+        logResponseData({ status: 401, code: 'unauthorized',err:err });
         res.status(401);
         return res.json({ status: 401, code: 'unauthorized',err:err });
       });
     }else{
-      if(exposedUrl.indexOf(req.url) !== -1){
+      var found =lodash.find(exposedUrl, function(value){
+        return value.test(req.url);
+      });
+      if(found){
         return next();
       }else{
+        logResponseData({ status: 401, code: 'unauthorized'});
         res.status(401);
         return res.json({ status: 401, code: 'unauthorized'});
       }

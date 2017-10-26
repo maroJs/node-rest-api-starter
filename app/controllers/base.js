@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
   ObjectId = mongoose.Types.ObjectId;
 
 
+
 exports.post = function(req, res,model) {
   var objectModel = new model(req.body);
   objectModel.save(function(err, object) {
@@ -54,6 +55,7 @@ exports.get = function(req, res,model,id) {
         })
       } else {
         if (objects) {
+          console.log('send')
           res.json({
             status: 200,
             data: objects

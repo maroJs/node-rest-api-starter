@@ -1,0 +1,33 @@
+{
+  "data": [
+    {
+      "autoCreate": true,
+      "name": "book",
+      "url": "/book",
+      "methods": [
+        "get",
+        "post",
+        "put",
+        "delete"
+      ],
+      "access": "public",
+      "fields": [
+        {
+          "title": "name",
+          "type": "string",
+          "required": true
+        },
+        {
+          "title": "pages",
+          "type": "number",
+          "required": false
+        },
+        {
+          "title": "author",
+          "type": "string",
+          "required": false
+        }
+      ]
+    }
+  ]
+}

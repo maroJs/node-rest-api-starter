@@ -1,0 +1,22 @@
+var  model = require('../models/{$name}'),
+  base = require('./base');
+
+exports.post = function(req, res, next) {
+  base.post(req,res,model)
+};
+
+exports.get = function(req, res, next) {
+  var id = req.params ?  req.params.id: null;
+  base.get(req,res,model,id)
+};
+
+
+exports.update = function(req, res, next) {
+  var id = req.params ?  req.params.id: null;
+  base.update(req,res,model,id)
+};
+
+exports.delete = function(req, res, next) {
+  var id = req.params ?  req.params.id: null;
+  base.delete(req,res,model,id)
+};
